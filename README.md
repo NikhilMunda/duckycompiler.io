@@ -1,5 +1,7 @@
 # Ducky Script Compiler & Payload Generator
 
+<img width="1872" height="920" alt="image" src="https://github.com/user-attachments/assets/57028f24-0eda-4bb7-bacf-2be18eed2b6a" />
+
 ## 🫡 Acknowledgments
 
 This Compiler is made for [VexilonHacker](https://github.com/VexilonHacker/OverQuack). I liked his project and thought on making an app to support his library.
@@ -104,7 +106,7 @@ This project is licensed under the **MIT License**
 
 Created and maintained by Nikhil Munda.
 
-For questions, contact: your.email@example.com
+For questions, contact: nikhilmunda@gmail.com
 
 ---
 
