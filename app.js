@@ -533,37 +533,69 @@ async function performCompilation(code) {
         errors.push({ line: block.line, message: `Unclosed ${block.type} block` });
     });
     
+    // In your performCompilation function's return statement:
     return {
-        success: errors.length === 0,
-        errors: errors,
-        stats: {
-            lines: lines.length,
-            variables: variables.size,
-            functions: functions.size
-        },
-        compiledCode: code
-    };
+         success: errors.length === 0,
+         errors: errors,
+         stats: {
+             lines: lines.length,
+             variables: variables.size,
+             functions: functions.size
+         },
+         compiledCode: code,        // Original input code
+         processedCode: code        // For now, same as input - can be enhanced later
+     };
+
 }
 
 function generatePayload() {
-    if (!lastCompilationResult) return;
+    if (!lastCompilationResult || !lastCompilationResult.success) {
+        addConsoleMessage('error', 'Cannot generate payload: No successful compilation result available');
+        return;
+    }
     
-    addConsoleMessage('info', 'Generating payload file...');
+    addConsoleMessage('info', 'Generating payload.oqs file...');
     
-    const payload = btoa(lastCompilationResult.compiledCode); // Base64 encode
-    const blob = new Blob([payload], { type: 'application/octet-stream' });
+    // Use the compiled and verified code (plain text, not base64)
+    const compiledCode = lastCompilationResult.processedCode || lastCompilationResult.compiledCode;
+    
+    // Create blob with plain text MIME type
+    const blob = new Blob([compiledCode], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     
+    // Create download link with correct filename
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'payload.oqs';
+    a.download = 'payload.oqs'; // Correct extension
+    a.style.display = 'none';
+    
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
     
-    addConsoleMessage('success', 'Payload file generated and downloaded successfully!');
+    addConsoleMessage('success', 'payload.oqs file generated and downloaded successfully!');
+    addConsoleMessage('info', `File contains ${compiledCode.split('\n').length} lines of verified Ducky script code`);
 }
+
+function updateButtonStates() {
+    if (lastCompilationResult && lastCompilationResult.success) {
+        generateBtn.disabled = false;
+        // Update button text to show it's ready
+        generateBtn.innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Generate payload.oqs
+        `;
+    } else {
+        generateBtn.disabled = true;
+    }
+}
+
+
 
 function updateStatus(type, text) {
     statusDot.className = `status-dot ${type}`;
