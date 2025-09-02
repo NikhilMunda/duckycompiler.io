@@ -34,7 +34,7 @@ REM This demonstrates compiler features
 VAR $username = "admin"
 VAR $delay_time = 500
 
-DEFINE FAST_TYPE 50
+DEFINE FAST_TYPE 50  REM THIS CODE IS WRONG! CORRECT IT
 
 FUNCTION open_notepad
   GUI r
@@ -45,7 +45,7 @@ FUNCTION open_notepad
 END_FUNCTION
 
 IF $_CAPSLOCK_ON == 1
-  CAPSLOCK
+  CAPSLOCK REM THIS CODE IS WRONG! CORRECT IT
 END_IF
 
 open_notepad
@@ -57,7 +57,7 @@ Current delay: $delay_time ms
 END_STRING
 
 STRINGLN
-DELAY FAST_TYPE
+DELAY FAST_TYPE REM THIS CODE IS WRONG! CORRECT IT
 STRING This line has a fast delay
 
 MOUSE_MOVE 100 100
