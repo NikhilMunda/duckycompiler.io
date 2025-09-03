@@ -7,8 +7,8 @@ let lastCompilationResult = null;
 
 // Ducky script data
 const DUCKY_COMMANDS = [
-    "STRING", "STRINGLN", "DELAY", "ENTER", "TAB", "SPACE", "BACKSPACE",
-    "GUI", "ALT", "CTRL", "SHIFT", "ESC", "DELETE", "HOME", "END",
+    "STRING", "STRINGLN", "DELAY", "ENTER", "TAB", "SPACE", "BACKSPACE", "MK_VOLUP", "MK_NEXT", "MK_PP", "MK_VOLDOWN", "MK_PREV", "MK_STOP", "MK_MUTE",
+    "GUI", "ALT", "CTRL", "SHIFT", "ESC", "DELETE", "HOME", "END", "RSHIFT", "CAPSLOCK", "UPARROW", "DOWNARROW", "LEFTARROW", "RIGHTARROW", "INSERT", "NUMLOCK", "PRINTSCREEN", "SCROLLLOCK",
     "PAGEUP", "PAGEDOWN", "UP", "DOWN", "LEFT", "RIGHT",
     "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12",
     "MOUSE_CLICK", "MOUSE_MOVE", "MOUSE_SCROLL", "MOUSE_PRESS", "MOUSE_RELEASE",
@@ -34,8 +34,7 @@ REM This demonstrates compiler features
 VAR $username = "admin"
 VAR $delay_time = 500
 
-REM THIS CODE IS WRONG! CORRECT IT
-DEFINE FAST_TYPE 50  
+DEFINE $FAST_TYPE 50
 
 FUNCTION open_notepad
   GUI r
@@ -46,8 +45,7 @@ FUNCTION open_notepad
 END_FUNCTION
 
 IF $_CAPSLOCK_ON == 1
-  REM THIS CODE IS WRONG! CORRECT IT
-  CAPSLOCK 
+  CAPSLOCK
 END_IF
 
 open_notepad
@@ -59,8 +57,7 @@ Current delay: $delay_time ms
 END_STRING
 
 STRINGLN
-REM THIS CODE IS WRONG! CORRECT IT
-DELAY FAST_TYPE
+DELAY $FAST_TYPE
 STRING This line has a fast delay
 
 MOUSE_MOVE 100 100
