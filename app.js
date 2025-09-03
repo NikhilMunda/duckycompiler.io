@@ -36,7 +36,7 @@ VAR $delay_time = 500
 
 DEFINE $FAST_TYPE 50
 
-FUNCTION open_notepad
+FUNCTION open_notepad()
   GUI r
   DELAY $delay_time
   STRING notepad
@@ -48,7 +48,7 @@ IF $_CAPSLOCK_ON == 1
   CAPSLOCK
 END_IF
 
-open_notepad
+open_notepad()
 
 STRING_BLOCK
 Hello, this is a test
