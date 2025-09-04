@@ -7,8 +7,11 @@ let lastCompilationResult = null;
 
 // Ducky script data
 const DUCKY_COMMANDS = [
-    "STRING", "STRINGLN", "DELAY", "ENTER", "TAB", "SPACE", "BACKSPACE", "MK_VOLUP", "MK_NEXT", "MK_PP", "MK_VOLDOWN", "MK_PREV", "MK_STOP", "MK_MUTE",
-    "GUI", "ALT", "CTRL", "SHIFT", "ESC", "DELETE", "HOME", "END", "RSHIFT", "CAPSLOCK", "UPARROW", "DOWNARROW", "LEFTARROW", "RIGHTARROW", "INSERT", "NUMLOCK", "PRINTSCREEN", "SCROLLLOCK",
+    "STRING", "STRINGLN", "DELAY", "ENTER", "TAB", "SPACE", "BACKSPACE",
+    "MK_VOLUP", "MK_NEXT", "MK_PP", "MK_VOLDOWN", "MK_PREV", "MK_STOP", "MK_MUTE",
+    "GUI", "ALT", "CTRL", "SHIFT", "ESC", "DELETE", "HOME", "END",
+    "RSHIFT", "CAPSLOCK", "UPARROW", "DOWNARROW", "LEFTARROW", "RIGHTARROW",
+    "INSERT", "NUMLOCK", "PRINTSCREEN", "SCROLLLOCK",
     "PAGEUP", "PAGEDOWN", "UP", "DOWN", "LEFT", "RIGHT",
     "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12",
     "MOUSE_CLICK", "MOUSE_MOVE", "MOUSE_SCROLL", "MOUSE_PRESS", "MOUSE_RELEASE",
@@ -17,7 +20,7 @@ const DUCKY_COMMANDS = [
     "VAR", "DEFINE", "FUNCTION", "END_FUNCTION",
     "IF", "ELSE", "END_IF", "WHILE", "END_WHILE",
     "STRING_BLOCK", "END_STRING", "STRINGLN_BLOCK", "END_STRINGLN",
-    "REM", "REM_BLOCK", "END_REM",
+    "REM", "REM_BLOCK", "END_REM",  // Traditional Ducky comments
     "IMPORT", "REPEAT", "SELECT_LAYOUT",
     "RESTART_PAYLOAD", "STOP_PAYLOAD", "PRINT"
 ];
@@ -27,19 +30,23 @@ const LAYOUTS = ["US", "US_DVO", "WIN_FR", "WIN_DE", "WIN_ES", "WIN_IT", "MAC_FR
 const INTERNAL_VARIABLES = ["$_CAPSLOCK_ON", "$_NUMLOCK_ON", "$_SCROLLLOCK_ON", "$_BSSID", "$_SSID", "$_PASSWD"];
 const RANDOM_VARIABLES = ["$_RANDOM_INT", "$_RANDOM_NUMBER", "$_RANDOM_LOWERCASE_LETTER", "$_RANDOM_UPPERCASE_LETTER", "$_RANDOM_LETTER", "$_RANDOM_SPECIAL", "$_RANDOM_CHAR"];
 
-// Sample Ducky script
-const SAMPLE_SCRIPT = `REM Advanced Ducky Script Example
-REM This demonstrates compiler features
+// Sample Ducky script with both comment styles
+const SAMPLE_SCRIPT = `// Advanced Ducky Script Example - C-style comments
+/* 
+This demonstrates both comment styles
+Multi-line C-style comment block 
+*/
 
+REM Traditional Ducky comment
 VAR $username = "admin"
 VAR $delay_time = 500
 
 DEFINE $FAST_TYPE 50
 
-FUNCTION open_notepad()
+FUNCTION open_notepad
   GUI r
   DELAY $delay_time
-  STRING notepad
+  STRING notepad    // Open notepad
   ENTER
   DELAY 1000
 END_FUNCTION
@@ -48,7 +55,7 @@ IF $_CAPSLOCK_ON == 1
   CAPSLOCK
 END_IF
 
-open_notepad()
+open_notepad
 
 STRING_BLOCK
 Hello, this is a test
@@ -61,7 +68,7 @@ DELAY $FAST_TYPE
 STRING This line has a fast delay
 
 MOUSE_MOVE 100 100
-MOUSE_CLICK LEFT
+MOUSE_CLICK LEFT    // Click at position
 DELAY 500
 
 WHILE $delay_time > 100
@@ -69,9 +76,14 @@ WHILE $delay_time > 100
   $delay_time = $delay_time - 100
 END_WHILE
 
-REM_BLOCK
-This is a block comment
+/*
+This is a C-style block comment
 Multiple lines can go here
+*/
+
+REM_BLOCK
+This is a traditional Ducky block comment
+Both styles are supported
 END_REM`;
 
 // DOM elements
@@ -93,48 +105,60 @@ function init() {
     loadingOverlay = document.getElementById('loadingOverlay');
 
     // Ensure loading overlay is hidden initially
-    loadingOverlay.classList.add('hidden');
+    if (loadingOverlay) {
+        loadingOverlay.classList.add('hidden');
+    }
 
     // Setup event listeners
     setupEventListeners();
 
     // Initialize Monaco Editor
     initializeMonacoEditor();
-    
+
     // Set initial status
     updateStatus('success', 'Ready');
 }
 
 function setupEventListeners() {
-    compileBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        compileScript();
-    });
-    
-    generateBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        generatePayload();
-    });
-    
-    clearConsoleBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        clearConsole();
-    });
-    
-    clearBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        clearEditor();
-    });
-    
-    loadExampleBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        loadExample();
-    });
+    if (compileBtn) {
+        compileBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            compileScript();
+        });
+    }
+
+    if (generateBtn) {
+        generateBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            generatePayload();
+        });
+    }
+
+    if (clearConsoleBtn) {
+        clearConsoleBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            clearConsole();
+        });
+    }
+
+    if (clearBtn) {
+        clearBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            clearEditor();
+        });
+    }
+
+    if (loadExampleBtn) {
+        loadExampleBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            loadExample();
+        });
+    }
 
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
@@ -142,25 +166,29 @@ function setupEventListeners() {
             e.preventDefault();
             compileScript();
         }
-        
+
         // Allow ESC to close loading overlay if needed
-        if (e.key === 'Escape' && !loadingOverlay.classList.contains('hidden')) {
+        if (e.key === 'Escape' && loadingOverlay && !loadingOverlay.classList.contains('hidden')) {
             hideLoading();
         }
     });
 }
 
 function showLoading() {
-    loadingOverlay.classList.remove('hidden');
+    if (loadingOverlay) {
+        loadingOverlay.classList.remove('hidden');
+    }
 }
 
 function hideLoading() {
-    loadingOverlay.classList.add('hidden');
+    if (loadingOverlay) {
+        loadingOverlay.classList.add('hidden');
+    }
 }
 
 function initializeMonacoEditor() {
     require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs' } });
-
+    
     require(['vs/editor/editor.main'], function () {
         // Register Ducky Script language
         monaco.languages.register({ id: 'ducky' });
@@ -169,13 +197,18 @@ function initializeMonacoEditor() {
         monaco.languages.setMonarchTokensProvider('ducky', {
             tokenizer: {
                 root: [
-                    // Comments
+                    // Single-line comments (both styles)
                     [/^REM.*$/, 'comment'],
+                    [/\/\/.*$/, 'comment'],
+                    
+                    // Block comments (both styles)
                     [/REM_BLOCK/, 'comment.block.begin'],
                     [/END_REM/, 'comment.block.end'],
+                    [/\/\*/, 'comment.block.begin'],
+                    [/\*\//, 'comment.block.end'],
                     
-                    // Commands
-                    [new RegExp(`\\b(${DUCKY_COMMANDS.join('|')})\\b`), 'keyword'],
+                    // Commands (filter out comment tokens from highlighting as keywords)
+                    [new RegExp(`\\b(${DUCKY_COMMANDS.filter(cmd => !['REM', '//', '/*', '*/'].includes(cmd)).join('|')})\\b`), 'keyword'],
                     
                     // Variables and defines
                     [/\$[a-zA-Z_][a-zA-Z0-9_]*/, 'variable'],
@@ -288,15 +321,15 @@ function initializeMonacoEditor() {
 
 function validateScriptRealtime() {
     if (!editor) return;
-    
+
     const code = editor.getValue();
     const lines = code.split('\n');
     const markers = [];
-    
     let lineNumber = 1;
+
     for (const line of lines) {
         const trimmed = line.trim();
-        if (trimmed && !trimmed.startsWith('REM') && !isInCommentBlock(lines, lineNumber - 1)) {
+        if (trimmed && !isCommentLine(trimmed) && !isInCommentBlock(lines, lineNumber - 1)) {
             const error = validateLine(trimmed, lineNumber);
             if (error) {
                 markers.push({
@@ -311,29 +344,49 @@ function validateScriptRealtime() {
         }
         lineNumber++;
     }
-    
+
     monaco.editor.setModelMarkers(editor.getModel(), 'ducky-validation', markers);
 }
 
+function isCommentLine(line) {
+    return line.startsWith('REM ') || line.startsWith('//');
+}
+
 function isInCommentBlock(lines, lineIndex) {
-    let inBlock = false;
+    let inDuckyBlock = false;
+    let inCBlock = false;
+    
     for (let i = 0; i <= lineIndex; i++) {
         const line = lines[i].trim();
-        if (line === 'REM_BLOCK') inBlock = true;
-        if (line === 'END_REM') inBlock = false;
+        
+        // Traditional Ducky style
+        if (line === 'REM_BLOCK') inDuckyBlock = true;
+        if (line === 'END_REM') inDuckyBlock = false;
+        
+        // C-style
+        if (line === '/*') inCBlock = true;
+        if (line === '*/') inCBlock = false;
     }
-    return inBlock;
+    
+    return inDuckyBlock || inCBlock;
 }
 
 function validateLine(line, lineNumber) {
+    // Skip all comment types
+    if (isCommentLine(line) || 
+        line === 'REM_BLOCK' || line === 'END_REM' ||
+        line === '/*' || line === '*/') {
+        return null;
+    }
+
     // Basic command validation
     const parts = line.split(/\s+/);
     const command = parts[0];
-    
+
     if (!DUCKY_COMMANDS.includes(command) && !command.startsWith('$') && !isUserDefinedFunction(command)) {
         return `Unknown command: ${command}`;
     }
-    
+
     // Specific validations
     switch (command) {
         case 'DELAY':
@@ -342,18 +395,15 @@ function validateLine(line, lineNumber) {
                 return 'DELAY value must be numeric or a variable';
             }
             break;
-            
         case 'MOUSE_CLICK':
             if (parts.length < 2) return 'MOUSE_CLICK requires a button parameter';
             if (!MOUSE_BUTTONS.includes(parts[1]) && !parts[1].startsWith('$')) {
                 return `Invalid mouse button. Use: ${MOUSE_BUTTONS.join(', ')}`;
             }
             break;
-            
         case 'MOUSE_MOVE':
             if (parts.length < 3) return 'MOUSE_MOVE requires X and Y coordinates';
             break;
-            
         case 'VAR':
             if (parts.length < 4 || parts[2] !== '=') {
                 return 'VAR syntax: VAR $name = value';
@@ -362,7 +412,6 @@ function validateLine(line, lineNumber) {
                 return 'Variable names must start with $';
             }
             break;
-            
         case 'SELECT_LAYOUT':
             if (parts.length < 2) return 'SELECT_LAYOUT requires a layout parameter';
             if (!LAYOUTS.includes(parts[1])) {
@@ -370,12 +419,13 @@ function validateLine(line, lineNumber) {
             }
             break;
     }
-    
+
     return null;
 }
 
 function isUserDefinedFunction(name) {
     if (!editor) return false;
+    
     // Check if it's a user-defined function (simplified check)
     const code = editor.getValue();
     const functionRegex = new RegExp(`FUNCTION\\s+${name}`, 'i');
@@ -384,47 +434,58 @@ function isUserDefinedFunction(name) {
 
 async function compileScript() {
     if (isCompiling || !editor) return;
-    
+
     isCompiling = true;
     updateStatus('compiling', 'Compiling...');
-    compileBtn.classList.add('btn--loading');
-    compileBtn.disabled = true;
-    generateBtn.disabled = true;
     
+    if (compileBtn) {
+        compileBtn.classList.add('btn--loading');
+        compileBtn.disabled = true;
+    }
+    if (generateBtn) {
+        generateBtn.disabled = true;
+    }
+
     // Show loading overlay
     showLoading();
-    
+
     try {
         const code = editor.getValue();
         addConsoleMessage('info', 'Starting compilation...');
-        
+
         // Simulate compilation delay for better UX
         await new Promise(resolve => setTimeout(resolve, 1500));
-        
+
         const result = await performCompilation(code);
-        
+
         if (result.success) {
             addConsoleMessage('success', `Compilation successful! ${result.stats.lines} lines processed, ${result.stats.variables} variables, ${result.stats.functions} functions.`);
             updateStatus('success', 'Compilation Success');
-            generateBtn.disabled = false;
+            if (generateBtn) {
+                generateBtn.disabled = false;
+            }
             lastCompilationResult = result;
+            updateButtonStates();
         } else {
             addConsoleMessage('error', `Compilation failed with ${result.errors.length} error(s)`);
             result.errors.forEach(error => {
                 addConsoleMessage('error', `Line ${error.line}: ${error.message}`);
             });
             updateStatus('error', 'Compilation Failed');
+            lastCompilationResult = null;
         }
-        
+
         updateStats(result.stats.lines, result.stats.variables, result.stats.functions);
-        
+
     } catch (error) {
         addConsoleMessage('error', `Compilation error: ${error.message}`);
         updateStatus('error', 'Compilation Error');
     } finally {
         isCompiling = false;
-        compileBtn.classList.remove('btn--loading');
-        compileBtn.disabled = false;
+        if (compileBtn) {
+            compileBtn.classList.remove('btn--loading');
+            compileBtn.disabled = false;
+        }
         hideLoading();
     }
 }
@@ -434,118 +495,157 @@ async function performCompilation(code) {
     const errors = [];
     const variables = new Set();
     const functions = new Set();
+    const defines = new Map();
     let blockStack = [];
-    
     let lineNumber = 1;
     let inCommentBlock = false;
     let inStringBlock = false;
-    
+    let processedLines = []; // Declare processedLines array
+
     for (const line of lines) {
         const trimmed = line.trim();
-        
-        // Skip empty lines
+
+        // Skip empty lines but preserve them in output
         if (!trimmed) {
+            processedLines.push(line);
             lineNumber++;
             continue;
         }
-        
-        // Handle comment blocks
-        if (trimmed === 'REM_BLOCK') {
+
+        // Handle comment blocks (both styles)
+        if (trimmed === 'REM_BLOCK' || trimmed === '/*') {
             inCommentBlock = true;
-            blockStack.push({ type: 'REM_BLOCK', line: lineNumber });
-        } else if (trimmed === 'END_REM') {
+            blockStack.push({ 
+                type: trimmed === 'REM_BLOCK' ? 'REM_BLOCK' : 'C_COMMENT_BLOCK', 
+                line: lineNumber,
+                startToken: trimmed
+            });
+            processedLines.push(line);
+        } else if (trimmed === 'END_REM' || trimmed === '*/') {
             if (!inCommentBlock) {
-                errors.push({ line: lineNumber, message: 'END_REM without matching REM_BLOCK' });
+                errors.push({ line: lineNumber, message: `${trimmed} without matching comment block start` });
+            } else {
+                const lastBlock = blockStack[blockStack.length - 1];
+                // Check for matching comment block types
+                if ((trimmed === 'END_REM' && lastBlock.type !== 'REM_BLOCK') ||
+                    (trimmed === '*/' && lastBlock.type !== 'C_COMMENT_BLOCK')) {
+                    errors.push({ 
+                        line: lineNumber, 
+                        message: `Mismatched comment block: ${lastBlock.startToken} started at line ${lastBlock.line} but found ${trimmed}` 
+                    });
+                }
+                blockStack.pop();
             }
             inCommentBlock = false;
-            blockStack.pop();
+            processedLines.push(line);
         } else if (inCommentBlock) {
-            // Skip lines inside comment blocks
+            // Keep comment block content
+            processedLines.push(line);
             lineNumber++;
             continue;
         }
-        
-        // Handle string blocks
-        if (trimmed === 'STRING_BLOCK' || trimmed === 'STRINGLN_BLOCK') {
+
+        // Handle string blocks (unchanged)
+        else if (trimmed === 'STRING_BLOCK' || trimmed === 'STRINGLN_BLOCK') {
             inStringBlock = true;
             blockStack.push({ type: trimmed, line: lineNumber });
+            processedLines.push(line);
         } else if (trimmed === 'END_STRING' || trimmed === 'END_STRINGLN') {
             if (!inStringBlock) {
                 errors.push({ line: lineNumber, message: `${trimmed} without matching string block` });
             }
             inStringBlock = false;
             blockStack.pop();
+            processedLines.push(line);
         } else if (inStringBlock) {
-            // Skip validation inside string blocks
+            processedLines.push(line);
             lineNumber++;
             continue;
         }
-        
-        // Skip single-line comments
-        if (trimmed.startsWith('REM ')) {
+
+        // Process single-line comments (both styles)
+        else if (isCommentLine(trimmed)) {
+            processedLines.push(line);
             lineNumber++;
             continue;
         }
-        
-        // Validate line
-        const error = validateLine(trimmed, lineNumber);
-        if (error) {
-            errors.push({ line: lineNumber, message: error });
-        }
-        
-        // Track variables and functions
-        const parts = trimmed.split(/\s+/);
-        if (parts[0] === 'VAR' && parts.length >= 2) {
-            variables.add(parts[1]);
-        }
-        if (parts[0] === 'FUNCTION' && parts.length >= 2) {
-            functions.add(parts[1]);
-            blockStack.push({ type: 'FUNCTION', line: lineNumber, name: parts[1] });
-        }
-        if (parts[0] === 'END_FUNCTION') {
-            const lastBlock = blockStack[blockStack.length - 1];
-            if (!lastBlock || lastBlock.type !== 'FUNCTION') {
-                errors.push({ line: lineNumber, message: 'END_FUNCTION without matching FUNCTION' });
+
+        // Validate line if not in comment or string block
+        else if (!inCommentBlock && !inStringBlock) {
+            const error = validateLine(trimmed, lineNumber);
+            if (error) {
+                errors.push({ line: lineNumber, message: error });
+            }
+
+            // Track variables and functions
+            const parts = trimmed.split(/\s+/);
+            
+            if (parts[0] === 'DEFINE' && parts.length >= 3) {
+                const defineName = parts[1];
+                const defineValue = parts.slice(2).join(' ');
+                defines.set(defineName, defineValue);
+                processedLines.push(line);
+            } else if (parts[0] === 'VAR' && parts.length >= 2) {
+                variables.add(parts[1]);
+                processedLines.push(line);
+            } else if (parts[0] === 'FUNCTION' && parts.length >= 2) {
+                functions.add(parts[1]);
+                blockStack.push({ type: 'FUNCTION', line: lineNumber, name: parts[1] });
+                processedLines.push(line);
+            } else if (parts[0] === 'END_FUNCTION') {
+                const lastBlock = blockStack[blockStack.length - 1];
+                if (!lastBlock || lastBlock.type !== 'FUNCTION') {
+                    errors.push({ line: lineNumber, message: 'END_FUNCTION without matching FUNCTION' });
+                } else {
+                    blockStack.pop();
+                }
+                processedLines.push(line);
+            } else if (['IF', 'WHILE'].includes(parts[0])) {
+                blockStack.push({ type: parts[0], line: lineNumber });
+                processedLines.push(line);
+            } else if (['END_IF', 'END_WHILE'].includes(parts[0])) {
+                const expectedType = parts[0].replace('END_', '');
+                const lastBlock = blockStack[blockStack.length - 1];
+                if (!lastBlock || lastBlock.type !== expectedType) {
+                    errors.push({ line: lineNumber, message: `${parts[0]} without matching ${expectedType}` });
+                } else {
+                    blockStack.pop();
+                }
+                processedLines.push(line);
             } else {
-                blockStack.pop();
+                // Regular commands - keep as-is after validation
+                processedLines.push(line);
             }
         }
-        
-        // Handle other block structures
-        if (['IF', 'WHILE'].includes(parts[0])) {
-            blockStack.push({ type: parts[0], line: lineNumber });
-        }
-        if (['END_IF', 'END_WHILE'].includes(parts[0])) {
-            const expectedType = parts[0].replace('END_', '');
-            const lastBlock = blockStack[blockStack.length - 1];
-            if (!lastBlock || lastBlock.type !== expectedType) {
-                errors.push({ line: lineNumber, message: `${parts[0]} without matching ${expectedType}` });
-            } else {
-                blockStack.pop();
-            }
-        }
-        
+
         lineNumber++;
     }
-    
+
     // Check for unclosed blocks
     blockStack.forEach(block => {
-        errors.push({ line: block.line, message: `Unclosed ${block.type} block` });
+        if (block.type === 'REM_BLOCK') {
+            errors.push({ line: block.line, message: `Unclosed REM_BLOCK (missing END_REM)` });
+        } else if (block.type === 'C_COMMENT_BLOCK') {
+            errors.push({ line: block.line, message: `Unclosed /* comment block (missing */)` });
+        } else {
+            errors.push({ line: block.line, message: `Unclosed ${block.type} block` });
+        }
     });
-    
-    // In your performCompilation function's return statement:
-    return {
-         success: errors.length === 0,
-         errors: errors,
-         stats: {
-             lines: lines.length,
-             variables: variables.size,
-             functions: functions.size
-         },
-         compiledCode: code,        // Original input code
-         processedCode: code        // For now, same as input - can be enhanced later
-     };
 
+    // Join processed lines back into code
+    const processedCode = processedLines.join('\n');
+
+    return {
+        success: errors.length === 0,
+        errors: errors,
+        stats: {
+            lines: lines.length,
+            variables: variables.size,
+            functions: functions.size
+        },
+        compiledCode: code,        // Original input code
+        processedCode: processedCode // Processed and validated code
+    };
 }
 
 function generatePayload() {
@@ -580,29 +680,37 @@ function generatePayload() {
 
 function updateButtonStates() {
     if (lastCompilationResult && lastCompilationResult.success) {
-        generateBtn.disabled = false;
-        // Update button text to show it's ready
-        generateBtn.innerHTML = `
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-            Generate payload.oqs
-        `;
+        if (generateBtn) {
+            generateBtn.disabled = false;
+            // Update button text to show it's ready
+            generateBtn.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Generate payload.oqs
+            `;
+        }
     } else {
-        generateBtn.disabled = true;
+        if (generateBtn) {
+            generateBtn.disabled = true;
+        }
     }
 }
 
-
-
 function updateStatus(type, text) {
-    statusDot.className = `status-dot ${type}`;
-    statusText.textContent = text;
+    if (statusDot) {
+        statusDot.className = `status-dot ${type}`;
+    }
+    if (statusText) {
+        statusText.textContent = text;
+    }
 }
 
 function addConsoleMessage(type, message, lineNumber = null) {
+    if (!consoleOutput) return;
+    
     const time = new Date().toLocaleTimeString('en-US', { hour12: false });
     const messageDiv = document.createElement('div');
     messageDiv.className = `console-message ${type}`;
@@ -613,7 +721,7 @@ function addConsoleMessage(type, message, lineNumber = null) {
     }
     
     messageDiv.innerHTML = `
-        <span class="message-time">[${time}]</span>
+        <span class="message-time">${time}</span>
         <span class="message-text">${messageText}</span>
     `;
     
@@ -622,8 +730,15 @@ function addConsoleMessage(type, message, lineNumber = null) {
 }
 
 function clearConsole() {
+    if (!consoleOutput) return;
+    
     const time = new Date().toLocaleTimeString('en-US', { hour12: false });
-    consoleOutput.innerHTML = `<div class="console-message info"><span class="message-time">[${time}]</span><span class="message-text">Console cleared.</span></div>`;
+    consoleOutput.innerHTML = `
+        <div class="console-message info">
+            <span class="message-time">${time}</span>
+            <span class="message-text">Console cleared</span>
+        </div>
+    `;
 }
 
 function clearEditor() {
@@ -631,7 +746,9 @@ function clearEditor() {
         editor.setValue('');
         addConsoleMessage('info', 'Editor cleared.');
         updateStats(0, 0, 0);
-        generateBtn.disabled = true;
+        if (generateBtn) {
+            generateBtn.disabled = true;
+        }
         lastCompilationResult = null;
         updateStatus('success', 'Ready');
     }
@@ -642,14 +759,18 @@ function loadExample() {
         editor.setValue(SAMPLE_SCRIPT);
         addConsoleMessage('info', 'Sample script loaded.');
         updateStats(SAMPLE_SCRIPT.split('\n').length, 2, 1);
-        generateBtn.disabled = true;
+        if (generateBtn) {
+            generateBtn.disabled = true;
+        }
         lastCompilationResult = null;
         updateStatus('success', 'Ready');
     }
 }
 
 function updateStats(lines, variables, functions) {
-    consoleStats.textContent = `${lines} lines processed, ${variables} variables, ${functions} functions`;
+    if (consoleStats) {
+        consoleStats.textContent = `${lines} lines processed, ${variables} variables, ${functions} functions`;
+    }
 }
 
 // Initialize when DOM is loaded
