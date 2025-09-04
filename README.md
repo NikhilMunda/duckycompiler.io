@@ -4,7 +4,7 @@
 
 ## 🫡 Acknowledgments
 
-This Compiler is made for [VexilonHacker](https://github.com/VexilonHacker/OverQuack) DuckyScripts. I liked his project and thought on making an app to support his library.
+This Compiler supports Normal pico ducky as well as have support for [VexilonHacker](https://github.com/VexilonHacker/OverQuack) DuckyScripts. I liked his project and thought on making an app to support his library.
 
 ## Overview
 
