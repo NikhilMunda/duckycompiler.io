@@ -49,46 +49,60 @@ It provides a professional IDE experience with a rich code editor, real-time syn
 
 The editor loads a comprehensive sample demonstrating variables, functions, loops, conditionals, mouse & keyboard commands, and comments.
 
-REM Advanced Ducky Script Example
+// Advanced Ducky Script Example - C-style comments
+/* 
+This demonstrates both comment styles
+Multi-line C-style comment block 
+*/
 
+REM Traditional Ducky comment
 VAR $username = "admin"
 VAR $delay_time = 500
 
 DEFINE $FAST_TYPE 50
 
 FUNCTION open_notepad
-GUI r
-DELAY $delay_time
-STRING notepad
-ENTER
-DELAY 1000
+  GUI r
+  DELAY $delay_time
+  STRING notepad    // Open notepad
+  ENTER
+  DELAY 1000
 END_FUNCTION
 
 IF $_CAPSLOCK_ON == 1
-CAPSLOCK_ON == 0
+  CAPSLOCK
 END_IF
 
 open_notepad
 
 STRING_BLOCK
 Hello, this is a test
-Written by: $Nikhil
+Written by: $username
 Current delay: $delay_time ms
 END_STRING
 
 STRINGLN
-DELAY FAST_TYPE
+DELAY $FAST_TYPE
 STRING This line has a fast delay
 
 MOUSE_MOVE 100 100
-MOUSE_CLICK LEFT
+MOUSE_CLICK LEFT    // Click at position
 DELAY 500
 
 WHILE $delay_time > 100
-DELAY $delay_time
-$delay_time = $delay_time - 100
+  DELAY $delay_time
+  $delay_time = $delay_time - 100
 END_WHILE
 
+/*
+This is a C-style block comment
+Multiple lines can go here
+*/
+
+REM_BLOCK
+This is a traditional Ducky block comment
+Both styles are supported
+END_REM
 
 ## Contributing
 
