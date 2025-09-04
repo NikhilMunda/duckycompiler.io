@@ -15,6 +15,7 @@ It provides a professional IDE experience with a rich code editor, real-time syn
 ## Features
 
 - **Monaco-based editor** with syntax highlighting, autocomplete, and error highlighting
+- Supports both comment style orignal 'REM', 'REM_BLOCK', 'END_REM', Traditional Ducky comment and '//', '/*', '*/', C-style comment respectively. Example can be found at the live compiler. If your Ducky doesn't support C-style then my suggestion is please donot use C-style comment with your code.
 - Full **syntax and semantic validation** of Ducky scripting commands and blocks
 - Validation of **variables, functions, defines, and block structures**
 - Color-coded, user-friendly **console** showing detailed compilation errors and warnings with line numbers
