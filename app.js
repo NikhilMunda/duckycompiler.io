@@ -18,7 +18,7 @@ const DUCKY_COMMANDS = [
     "JIGGLE_MOUSE", "BACKGROUND_JIGGLE_MOUSE",
     "HOLD", "RELEASE", "RELEASE_ALL",
     "VAR", "DEFINE", "FUNCTION", "END_FUNCTION",
-    "IF", "ELSE", "END_IF", "WHILE", "END_WHILE",
+    "IF", "ELSE", "ELSE_IF", "END_IF", "WHILE", "END_WHILE",
     "STRING_BLOCK", "END_STRING", "STRINGLN_BLOCK", "END_STRINGLN",
     "REM", "REM_BLOCK", "END_REM",  // Traditional Ducky comments
     "IMPORT", "REPEAT", "SELECT_LAYOUT",
@@ -36,6 +36,20 @@ const SAMPLE_SCRIPT = `// Advanced Ducky Script Example - C-style comments
 This demonstrates both comment styles
 Multi-line C-style comment block 
 */
+
+REM SUPPORT FOR IF, ELSE_IF, ELSE, END_IF
+
+VAR $number = 42
+
+IF ($number < 10)
+    STRINGLN Number is small
+ELSE_IF ($number < 50)
+    STRINGLN Number is medium  # This will execute
+ELSE_IF ($number < 100)
+    STRINGLN Number is large
+ELSE
+    STRINGLN Number is very large
+END_IF
 
 REM Traditional Ducky comment
 VAR $username = "admin"
