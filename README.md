@@ -48,7 +48,7 @@ It provides a professional IDE experience with a rich code editor, real-time syn
 ## Example Script
 
 The editor loads a comprehensive sample demonstrating variables, functions, loops, conditionals, mouse & keyboard commands, and comments.
-
+```
 // Advanced Ducky Script Example - C-style comments
 /* 
 This demonstrates both comment styles
@@ -103,7 +103,7 @@ REM_BLOCK
 This is a traditional Ducky block comment
 Both styles are supported
 END_REM
-
+```
 ## Contributing
 
 Contributions are welcome! Please:
